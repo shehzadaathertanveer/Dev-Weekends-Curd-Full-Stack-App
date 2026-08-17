@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully'))
   .catch((err) => console.error('MongoDB Connection Error:', err));
 
-// Create an Express router mounted on /api
+// Create an Express router
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -53,7 +53,8 @@ router.delete("/:id", (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
-// Mount router under both /api and root to handle local & Netlify serverless routing
+// ✅ Mount on Netlify function base route + /api + /
+app.use('/.netlify/functions/index', router);
 app.use('/api', router);
 app.use('/', router);
 
