@@ -12,7 +12,7 @@ function CreateUser() {
   function handleCreateUser(e) {
     e.preventDefault(); // Prevents page reload on form submission
 
-    axios.post('http://localhost:8001/Create', { Name, Email, Age })
+    axios.post('/Create', { Name, Email, Age })
       .then((res) => {
         console.log('User created:', res.data);
         setName('');

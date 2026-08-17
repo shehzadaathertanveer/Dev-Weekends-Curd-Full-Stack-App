@@ -1,43 +1,40 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import {useParams} from "react-router-dom"
-
+import { useNavigate, useParams } from 'react-router-dom';
 
 function UpdateUser() {
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
   const [Age, setAge] = useState('');
 
-    const navigate =useNavigate()
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-    const {id}= useParams()
-
-    useEffect(()=>{
-        axios.get('http://localhost:8001/Update/'+id)
+  useEffect(() => {
+    // Added /api/ prefix here
+    axios.get('/api/Update/' + id)
       .then((res) => {
-        console.log('Users fetched:', res.data);
+        console.log('User fetched:', res.data);
         setName(res.data.Name);
         setEmail(res.data.Email);
         setAge(res.data.Age);
       })
       .catch((err) => {
-        console.error('Error getting user for updating user:', err);
+        console.error('Error getting user for update:', err);
       });
-    },[])
+  }, [id]);
 
   function handleUpdateUser(e) {
     e.preventDefault(); 
 
-    axios.patch('http://localhost:8001/Update/'+id, { Name, Email, Age })
+    // Added /api/ prefix here
+    axios.patch('/api/Update/' + id, { Name, Email, Age })
       .then((res) => {
         console.log('User updated:', res.data);
         setName('');
         setEmail('');
         setAge('');
-
-        navigate('/')
-        
+        navigate('/');
       })
       .catch((err) => {
         console.error('Error updating user:', err);
