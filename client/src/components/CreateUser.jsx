@@ -7,20 +7,19 @@ function CreateUser() {
   const [Email, setEmail] = useState('');
   const [Age, setAge] = useState('');
 
-    const navigate =useNavigate()
+  const navigate = useNavigate();
 
   function handleCreateUser(e) {
-    e.preventDefault(); // Prevents page reload on form submission
+    e.preventDefault();
 
-    axios.post('/Create', { Name, Email, Age })
+    // Added /api prefix so netlify redirects to the backend function
+    axios.post('/api/Create', { Name, Email, Age })
       .then((res) => {
         console.log('User created:', res.data);
         setName('');
         setEmail('');
         setAge('');
-
-        navigate('/')
-        
+        navigate('/');
       })
       .catch((err) => {
         console.error('Error creating user:', err);
