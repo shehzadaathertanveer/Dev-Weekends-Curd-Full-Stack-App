@@ -4,6 +4,8 @@ const cors = require('cors')
 const Users = require("./model/UserSchema")
 require('dotenv').config();
 
+const serverless = require('serverless-http');
+
 const PORT = process.env.PORT || 8001;
 
 const app = express()
@@ -53,3 +55,4 @@ app.delete("/:id", (req, res) => {
 });
 
 app.listen(PORT,()=>{console.log("Server Started at Port: ",PORT)})
+module.exports.handler = serverless(app);
