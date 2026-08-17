@@ -1,7 +1,12 @@
 [build]
-  command = "npm run build --prefix client"
-  publish = "client/dist"
-  functions = "server"
+  # Remove '--prefix client' because Netlify is already inside the client folder
+  command = "npm run build"
+  
+  # Set relative to the client folder (Vite = dist, CRA = build)
+  publish = "dist"
+  
+  # Point back to the root 'server' folder for functions
+  functions = "../server"
 
 [[redirects]]
   from = "/api/*"
