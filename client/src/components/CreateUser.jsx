@@ -12,7 +12,6 @@ function CreateUser() {
   function handleCreateUser(e) {
     e.preventDefault();
 
-    // Added /api prefix so netlify redirects to the backend function
     axios.post('/api/Create', { Name, Email, Age })
       .then((res) => {
         console.log('User created:', res.data);
