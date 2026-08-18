@@ -3,12 +3,19 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Users = require('./model/UserSchema');
 require('dotenv').config();
-import axios from 'axios';
-axios.defaults.baseURL = 'https://dev-weekends-curd-full-stack-app.vercel.app';
 
 const app = express();
 
-app.use(cors());
+// ✅ Configured CORS options for Vercel + Netlify frontend
+const corsOptions = {
+  origin: ['https://crudoperationsde.netlify.app', 'http://localhost:5173'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 app.use(express.json());
 
 // Connect to MongoDB
@@ -54,5 +61,4 @@ if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => console.log("Server Started at Port:", PORT));
 }
 
-// Export the Express app for Vercel
 module.exports = app;
