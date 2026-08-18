@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
+
+const API_URL = 'https://dev-weekends-curd-full-stack-app.vercel.app';
+
 function UpdateUser() {
   const [Name, setName] = useState('');
   const [Email, setEmail] = useState('');
@@ -11,8 +14,8 @@ function UpdateUser() {
   const { id } = useParams();
 
   useEffect(() => {
-    // Added /api/ prefix here
-    axios.get('/api/Update/' + id)
+   
+    axios.get(`${API_URL}/update/${id}`)
       .then((res) => {
         console.log('User fetched:', res.data);
         setName(res.data.Name);
@@ -27,8 +30,7 @@ function UpdateUser() {
   function handleUpdateUser(e) {
     e.preventDefault(); 
 
-    // Added /api/ prefix here
-    axios.patch('/api/Update/' + id, { Name, Email, Age })
+    axios.patch(`${API_URL}/update/${id}`, { Name, Email, Age })
       .then((res) => {
         console.log('User updated:', res.data);
         setName('');

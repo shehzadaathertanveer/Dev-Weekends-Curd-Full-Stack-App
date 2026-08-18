@@ -12,7 +12,8 @@ function CreateUser() {
   function handleCreateUser(e) {
     e.preventDefault();
 
-    axios.post('/api/Create', { Name, Email, Age })
+  
+    axios.post('https://dev-weekends-curd-full-stack-app.vercel.app/Create', { Name, Email, Age })
       .then((res) => {
         console.log('User created:', res.data);
         setName('');

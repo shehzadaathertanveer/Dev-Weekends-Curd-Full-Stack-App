@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Users = require('./model/UserSchema');
 require('dotenv').config();
+import axios from 'axios';
+axios.defaults.baseURL = 'https://dev-weekends-curd-full-stack-app.vercel.app';
 
 const app = express();
 

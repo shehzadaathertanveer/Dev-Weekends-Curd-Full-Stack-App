@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const API_URL = 'https://dev-weekends-curd-full-stack-app.vercel.app';
+
 function Home() {
   const [allUsers, setAllUsers] = useState([]);
   const navigate = useNavigate();
@@ -11,11 +13,10 @@ function Home() {
   }
 
   useEffect(() => {
-    // Added /api prefix to hit Express backend via Netlify redirect
-    axios.get('/api')
+
+    axios.get(`${API_URL}/`)
       .then((res) => {
         console.log('Users fetched:', res.data);
-        // Fallback to empty array if response isn't an array
         setAllUsers(Array.isArray(res.data) ? res.data : []);
       })
       .catch((err) => {
@@ -24,11 +25,10 @@ function Home() {
   }, []);
 
   function deleteUser(id) {
-    // Added /api prefix for delete request
-    axios.delete('/api/' + id)
+  
+    axios.delete(`${API_URL}/${id}`)
       .then((res) => {
         console.log('User deleted:', res.data);
-        // Remove deleted user from state locally
         setAllUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
       })
       .catch((err) => {
@@ -81,7 +81,7 @@ function Home() {
                     </div>
                   </td>
                 </tr>
-              ))}       
+              ))}        
             </tbody>
           </table>
         </div>
