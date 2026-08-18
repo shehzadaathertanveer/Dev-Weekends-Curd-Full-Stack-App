@@ -16,51 +16,44 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully'))
   .catch((err) => console.error('MongoDB Connection Error:', err));
 
-// 1. Dynamic path prefix stripper (Fixes 404 for both GET / and POST /Create)
-app.use((req, res, next) => {
-  if (req.url.startsWith('/.netlify/functions/index')) {
-    req.url = req.url.replace('/.netlify/functions/index', '');
-  }
-  if (req.url.startsWith('/api')) {
-    req.url = req.url.replace('/api', '');
-  }
-  if (req.url === '' || req.url === '/api') {
-    req.url = '/';
-  }
-  next();
-});
+// 1. Create a Router
+const router = express.Router();
 
-// 2. Direct Routes
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
   Users.find()
     .then(users => res.json(users))
     .catch(err => res.status(500).json(err));
 });
 
-app.post("/Create", (req, res) => {
+router.post("/Create", (req, res) => {
   Users.create(req.body)
     .then(user => res.json(user))
     .catch(err => res.status(400).json(err));
 });
 
-app.get("/update/:id", (req, res) => {
+router.get("/update/:id", (req, res) => {
   Users.findById(req.params.id)
     .then(user => res.json(user))
     .catch(err => res.status(404).json(err));
 });
 
-app.patch("/update/:id", (req, res) => { 
+router.patch("/update/:id", (req, res) => { 
   Users.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(user => res.json(user))
     .catch(err => res.status(400).json(err));
 });
 
-app.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   Users.findByIdAndDelete(req.params.id)
     .then(() => Users.find())
     .then(users => res.json(users))
     .catch(err => res.status(500).json(err));
 });
+
+// 2. Mount the router on all paths Netlify might dispatch
+app.use('/.netlify/functions/index', router);
+app.use('/api', router);
+app.use('/', router);
 
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 8001;
